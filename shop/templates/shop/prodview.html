@@ -7,15 +7,26 @@
     <div class="row">
        <img src="/media//{{product.image}}" width="233px" height="385px">
        <div class="row">
-        <button class="btn btn-primary mx-3 mt-5"> Buy Now</button>
-        <button class="btn btn-primary mx-3 mt-5"> Add To Cart</button>
+        <div class="d-inline-block">
+            <a href="/shop"><button class="btn btn-sm btn-outline-dark mx-3 mt-5"> Buy Now</button></a>
+        </div>
+        <div class="d-inline-block">
+            <a href="/shop"><button class="btn btn-sm btn-outline-dark mx-3 mt-5"> Add To Cart</button></a>
+        </div>
+        <div class="d-inline-block">
+            <a href="/shop"><button class="btn btn-sm btn-outline-dark mx-3 mt-5">Home</button></a>
+        </div>
     </div>
     </div>
         </div>
         <div class="col-md-8">
+            <div class="row" style="margin-top: 50px;">
             <h5>{{product.product_name}}</h5>
             <p><b> Rs. {{product.price}}</b></p>
-            <p>{{product.desc}}</p>
+            <p>Date of Release :{{product.pub_date}}</p>
+            <p>catagory of product :{{product.category}}</p>
+            <p>sub catagory of product :{{product.sub_catagory}}</p>
+        </div>
         </div>
         </div>
 </div>

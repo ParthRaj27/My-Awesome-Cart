@@ -27,5 +27,5 @@ urlpatterns = [
     path('products/<int:myid>', views.ProductView,name ='ProductView'),
     path('search/', views.search,name ='search'),
     path('Checkout/', views.Checkout,name ='Checkout') , 
-    path('bill/', views.bill,name ='bill')
+    # path('bill/', views.bill,name ='bill')
 ]
