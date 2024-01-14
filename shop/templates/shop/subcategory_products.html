@@ -1,0 +1,75 @@
+{% extends 'shop/basic.html' %}
+
+{% block css %}
+<style>
+    .cover-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .col-md-3 img {
+        width: 100%; /* Use 100% width for responsiveness */
+        height: 250px; /* Automatically adjust height to maintain aspect ratio */
+        object-fit: cover;
+      }
+</style>
+{% endblock %}
+
+{% block title %}
+My Awesome Cart - {{ sub_category }} Products
+{% endblock %}
+
+{% block body %}
+{% load static %}
+
+<body>
+    <h1 class="text-center mt-4 mb-5">{{ sub_category }} Products</h1>
+    <div class="container">
+        {% if products %}
+        <h2 class="flash-sale-heading">Flash Sale On {{ sub_category }} Recommended Items</h2> 
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-3">
+                        <!-- Sale badge-->
+                        <div class="card mb-4 shadow-sm">
+                            <img class="card-img-top cover-image img-fluid" src="{{ product.image.url }}" alt="{{ product.product_name }}">
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                            <div class="card-body">
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder" id="namepr{{ product.id }}">{{ product.product_name|slice:"0:10" }}...</h5>
+                                        <!-- Product reviews-->
+                                        <div class="d-flex justify-content-center small text-warning mb-2">
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                        </div>
+                                        <!-- Product price-->
+                                        <span class="text-muted" id="pricepr{{ product.id }}">${{ product.price }}</span>
+                                        <small class="text-muted text-decoration-line-through"> $ {{ product.MRP }}</small>
+                                    </div>
+                                </div>
+                                <p class="card-text">{{ product.desc|slice:"0:20" }}...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a href="/shop/products/{{ product.id }}" class="btn btn-sm btn-outline-dark mx-2">Quick View</a>
+                                        <span id="divpr{{ product.id }}" class="divpr">
+                                            <button id="pr{{ product.id }}" class="btn btn-sm btn-outline-dark cart">Add To Cart</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No products found for {{ sub_category }}.</p>
+        {% endif %}
+    </div>
+</body>
+
+{% endblock %}

@@ -1,33 +1,42 @@
 {% extends 'shop/basic.html' %}
-{% block title %} {{product.product_name}} -- My Awesome Cart{% endblock %}
+
+{% block title %}
+{{ product.product_name }} -- My Awesome Cart
+{% endblock %}
+
 {% block body %}
 <div class="container my-4">
     <div class="row">
-    <div class="col-md-4">
-    <div class="row">
-       <img src="/media//{{product.image}}" width="233px" height="385px">
-       <div class="row">
-        <div class="d-inline-block">
-            <a href="/shop"><button class="btn btn-sm btn-outline-dark mx-3 mt-5"> Buy Now</button></a>
-        </div>
-        <div class="d-inline-block">
-            <a href="/shop"><button class="btn btn-sm btn-outline-dark mx-3 mt-5"> Add To Cart</button></a>
-        </div>
-        <div class="d-inline-block">
-            <a href="/shop"><button class="btn btn-sm btn-outline-dark mx-3 mt-5">Home</button></a>
-        </div>
-    </div>
-    </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="/media/{{ product.image }}" class="img-fluid" alt="{{ product.product_name }}">
+                </div>
+                <div class="col-md-12 mt-3">
+                    <div class="d-flex justify-content-between">
+                        <a href="/shop"><button class="btn btn-sm btn-outline-dark">Buy Now</button></a>
+                        <a href="/shop"><button class="btn btn-sm btn-outline-dark">Add To Cart</button></a>
+                        <a href="/shop"><button class="btn btn-sm btn-outline-dark">Home</button></a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-8">
-            <div class="row" style="margin-top: 50px;">
-            <h5>{{product.product_name}}</h5>
-            <p><b> Rs. {{product.price}}</b></p>
-            <p>Date of Release :{{product.pub_date}}</p>
-            <p>catagory of product :{{product.category}}</p>
-            <p>sub catagory of product :{{product.sub_catagory}}</p>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <h3>{{ product.product_name }}</h3>
+                </div>
+                <div class="col-md-12">
+                    <p class="lead"><b>Our Price: <b>$ {{ product.price }}</p></b></b>
+                    <p class="lead"><b>Original Price:</b> <small class="text-muted text-decoration-line-through">${{ product.MRP }}</small></p>
+                    <p class="lead"><b>Discount:</b> - {{ product.discount_percentage }}%</p>
+                    <p><b>Date of Release:</b> {{ product.pub_date }}</p>
+                    <p><b>Category of Product:</b> {{ product.category }}</p>
+                    <p><b>About Product:</b> {{ product.desc }}</p>
+                    <p><b>Sub-category of Product:</b> {{ product.sub_category }}</p>
+                </div>
+            </div>
         </div>
-        </div>
-        </div>
+    </div>
 </div>
 {% endblock %}

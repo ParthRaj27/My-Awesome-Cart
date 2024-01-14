@@ -7,19 +7,24 @@ import json
 # Create your views here.
 from django.http import HttpResponse
 
+
 def index(request):
-    products= Product.objects.all()
-    allProds=[]
-    catprods= Product.objects.values('category', 'id')
-    cats= {item["category"] for item in catprods}
+    allProds = []
+    catprods = Product.objects.values('category', 'id')
+    cats = {item["category"] for item in catprods}
+    
     for cat in cats:
-        prod=Product.objects.filter(category=cat)
-        n = len(prod)
-        nSlides = n // 4 + ceil((n / 4) - (n // 4))
-        if len(prod) != 0:
-            allProds.append([prod, range(1, nSlides), nSlides])
-    params={'allProds':allProds }
-    return render(request,"shop/index.html", params)
+        sub_cats = Product.objects.filter(category=cat).values('sub_category').distinct()
+        for sub_cat in sub_cats:
+            prod = Product.objects.filter(category=cat, sub_category=sub_cat['sub_category'])
+            n = len(prod)
+            nSlides = n // 4 + ceil((n / 4) - (n // 4))
+            
+            if len(prod) != 0:
+                allProds.append([prod, range(1, nSlides), nSlides])
+    
+    params = {'allProds': allProds}
+    return render(request, "shop/index.html", params)
 def searchMatch(query, item):
     print(query)
     '''return true only if query matches the item'''
@@ -43,7 +48,7 @@ def search(request):
             allProds.append([prod, range(1, nSlides), nSlides])
     params = {'allProds': allProds, "msg": ""}
     if len(allProds) == 0 or len(query)<4:
-        params = {'msg': "Please make sure to enter relevant search query"}
+        params = {'msg': "Please make sure to enter relevant search query" ,'query' : query}
     return render(request, 'shop/search.html', params)
 
 
@@ -62,6 +67,8 @@ def contact(request):
         hey=True;
         return render(request, "shop/contact.html" ,{'hey':hey})
     return render(request, "shop/contact.html")
+
+
 def tracker(request):
     if request.method=="POST":
         orderId = request.POST.get('orderId', '')
@@ -103,8 +110,9 @@ def ProductView(request , myid):
     # if we have no any primary key than django automatic generate id key with name id
     # fetch the product using id
     product=Product.objects.filter(id=myid)
+    
     return render(request, 'shop/prodview.html' ,{'product':product[0]})
-# at above the initializtion of product is list and we kniw we cam fetch one thind from one id so we will give this zero
+# at above the initializtion of product is list and we knew we cam fetch one thind from one id so we will give this zero
 # first product is the product where we will use to access in templates and another one is the main Product which is initialized at above
 
 def Checkout(request):
@@ -126,3 +134,11 @@ def Checkout(request):
         id=order.order_id
         return render(request, 'shop/checkout.html', {'thank':thank, 'id':id})
     return render(request, 'shop/checkout.html')
+from django.shortcuts import render
+from .models import Product
+
+def subcategory_products(request, sub_category):
+    products = Product.objects.filter(sub_category=sub_category)
+    print(sub_category)
+    context = {'products': products, 'sub_category': sub_category}
+    return render(request, 'shop/subcategory_products.html', context)

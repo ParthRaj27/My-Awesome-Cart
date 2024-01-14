@@ -26,6 +26,7 @@ urlpatterns = [
     path('tracker/', views.tracker,name ='tracker'),
     path('products/<int:myid>', views.ProductView,name ='ProductView'),
     path('search/', views.search,name ='search'),
-    path('Checkout/', views.Checkout,name ='Checkout') , 
+    path('Checkout/', views.Checkout,name ='Checkout') ,
+    path('subcategory/<str:sub_category>/', views.subcategory_products, name='subcategory_products'), 
     # path('bill/', views.bill,name ='bill')
 ]

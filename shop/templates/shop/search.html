@@ -1,69 +1,94 @@
 {% extends 'shop/basic.html' %}
 {% block css %}
-          .col-md-3
-          {
-          display: inline-block;
-          margin-left:-4px;
-          }
+<style>
+  .no-item-found {
+    text-align: center;
+    margin-top: 4em;
+    padding: 2em;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-          .carousel-indicators .active {
-          background-color: blue;
-            }
+  .no-item-found h1 {
+  color: #e44d26; /* or any color you prefer */
+}
 
-          .col-md-3 img{
+.no-item-found b {
+  font-size: 1.2em;
+  color: #333;
+}
 
-          width: 170px;
-          height: 200px;
-          }
+.no-item-found ul {
+  list-style-type: none;
+  padding: 0;
+}
 
-          body .carousel-indicator li{
-          background-color: blue;
-          }
+.no-item-found li {
+  margin-bottom: 0.5em;
+  color: #555;
+}
+.col-md-3
+{
+  display: inline-block;
+  margin-left:-4px;
+}
 
-          body .carousel-indicators{
-          bottom: 0;
-          }
+.carousel-indicators .active {
+  background-color: blue;
+}
 
-          body .carousel-control-prev-icon,
+.col-md-3 img{
+  
+  width: 170px;
+  height: 200px;
+}
+
+body .carousel-indicator li{
+  background-color: blue;
+}
+
+body .carousel-indicators{
+  bottom: 0;
+}
+
+body .carousel-control-prev-icon,
           body .carousel-control-next-icon{
           background-color: blue;
           }
 
-          .carousel-control-prev,
-          .carousel-control-next{
-          top: auto;
-          bottom: auto;
-          padding-top: 222px;
-          }
-           body .no-padding{
-           padding-left: 0,
-           padding-right: 0;
-           }
+.carousel-control-prev,
+.carousel-control-next{ 
+top: auto; 
+bottom: auto; 
+padding-top: 222px; 
+} 
+body .no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+          </style>
  {% endblock %}
  {% block title%}My Awesome cart {% endblock %}
 {% block body %}
 {% load static %}
- <!-- Header-->
- <header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Shop in style</h1>
-            <p class="lead fw-normal text-white-50 mb-0">With My Awesome Cart</p>
-        </div>
-    </div>
-</header>
 <div class="container">
     {% for Product, range, nSlides in allProds %}
-    <h2 class="text-center mt-4">Flash Sale On {{ Product.0.category }} : Recommended Items</h2>
+    <h2 class="flash-sale-heading">Flash Sale On {{ Product.0.sub_category }} Recommended Items</h2>
     <div class="row">
         {% for prod in Product %}
         <div class="col-md-3">
             <div class="card mb-4 shadow-sm">
                 <img class="card-img-top" src="{{ prod.image.url }}" alt="{{ prod.product_name }}">
                 <div class="card-body">
-                  <span class="text-muted" id="pricepr{{ prod.id }}">${{ prod.price }}</span>
-                  <small class="text-muted text-decoration-line-through">$20.00</small>
-                    <h5 class="card-title" id="namepr{{ prod.id }}">{{ prod.product_name }}</h5>
+                  <b><span class="text-muted" id="pricepr{{ prod.id }}">${{ prod.price }}</span></b>
+                  <small class="text-muted text-decoration-line-through"> $ {{ prod.MRP }}</small>
+                  <!-- <p>{{ product.MRP }}</p> -->
+                    <h5 class="card-title" id="namepr{{ prod.id }}">{{ prod.product_name|slice:"0:20" }}..</h5>
                     <p class="card-text">{{ prod.desc|slice:"0:25" }}...</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
@@ -78,7 +103,23 @@
         </div>
         {% endfor %}
     </div>
+    
     {% endfor %}
+    {% if allProds %}
+    {# No items found message will be skipped if there are items #}
+{% else %}
+    <div class="mb-4 no-item-found">
+        <h1>No items found</h1>
+        Your search query: <b>{{ query }}</b> did not match any documents. <br>
+        Suggestions:
+        <ul>
+            <li>Make sure that all words are spelled correctly.</li>
+            <li>Try more general keywords.</li>
+            <li>Try fewer keywords.</li>
+            <li>Try different keywords.</li>
+        </ul>
+    </div>
+{% endif %}
 </div>
 
  {% endblock %}
