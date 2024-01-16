@@ -1,6 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        body {
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            padding-top: 60px;
+            transition: 0.5s;
+            z-index: 1; /* Ensure the navbar is on top of other elements */
+        }
+
+        #navbar.overlay-open {
+            background-color: rgba(0, 0, 0, 0.7); /* Dark overlay when navbar is open */
+            z-index: 2; /* Ensure the overlay is above other elements */
+        }
+
+        #navbar.overlay-open #main {
+            filter: brightness(0.5); /* Reduce brightness of main content when navbar is open */
+        }
+
+        #navbar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #navbar a:hover {
+            color: #f1f1f1;
+        }
+
+        #main {
+            transition: margin-left 0.5s;
+            padding: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 0; /* Ensure the main content is behind the navbar and overlay */
+        }
+
+        .openbtn {
+            display: block;
+            float: left;
+            margin-right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 3; /* Ensure the open button is on top of other elements */
+        }
+
+        .search-bar {
+            float: left;
+            width: calc(100% - 200px);
+        }
+
+        .cart-button {
+            float: right;
+        }
+
+        .closebtn {
+            font-size: 30px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            color: #818181;
+        }
+    </style>
     <!-- Include Poppins font from Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
     <style>
@@ -10,31 +87,35 @@
         }
     </style>
     <style>
-  
+
         .flash-sale-heading {
-          margin-top: 12px;
-          font-size: 28px;
-          font-weight: bold;
-          text-align: center;
-          padding: 20px;
-          background: linear-gradient(45deg, #ffcc00, #ff66b2);
-          color: #fff;
-          border-radius: 10px;
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-          animation: bgLightAnimation 3s ease-in-out infinite alternate;
-      }
-      
-      @keyframes bgLightAnimation {
-          0% {
-              background-size: 100% 100%;
-          }
-          100% {
-              background-size: 120% 120%;
-          }
-      }
-      </style>
+            margin-top: 12px;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(45deg, #ffcc00, #ff66b2);
+            color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            animation: bgLightAnimation 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgLightAnimation {
+            0% {
+                background-size: 100% 100%;
+            }
+            100% {
+                background-size: 120% 120%;
+            }
+        }
+
+        .me {
+            margin-top: 38px;
+        }
+    </style>
     {% load static %}
-    
+
     <script src="{% static 'js/scripts.js' %}"></script>
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon_io/apple-touch-icon.png' %}">
@@ -48,63 +129,56 @@
     {% block css %} {% endblock %}
 </head>
 <body>
-    <nav class="fixed-top navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="/shop">My Awesome Cart</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/shop">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/shop/about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/shop/contact">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/shop/tracker">Tracker</a></li>
-                    
-                    <!-- Dropdown Example -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Categories
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <!-- Add your dropdown items here -->
-                            <a class="dropdown-item" href="/shop/subcategory/Airbuds">Airpods</a>
-                            <a class="dropdown-item" href="/shop/subcategory/Smart watch">Smart watch</a>
-                            <a class="dropdown-item" href="/shop/subcategory/Wrist Watch">Wrist Watch</a>
-                            <a class="dropdown-item" href="/shop/subcategory/mens_wear">Are You Man?</a>
-                            <a class="dropdown-item" href="/shop/subcategory/Shoes">Try Shoes</a>
-                            <a class="dropdown-item" href="/shop/subcategory/Nack-Band">Try Nack-Band </a>
-                            <a class="dropdown-item" href="/shop/subcategory/Washing-Machines">Washing-Machines </a>
-                            <a class="dropdown-item" href="/shop/subcategory/MobilePhones">Want A Mobile phone?</a>
-                            <a class="dropdown-item" href="/shop/subcategory/Apple Phones">Apple Lover?</a>
-                        </div>
-                    </li>
-                    <!-- End Dropdown Example -->
-                    
-                </ul>
-                <form method="get" action="/shop/search/" class="d-flex form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search" />
-                    <button class="btn btn-outline-dark" type="submit">Search</button>
-                </form>
-                <form class="d-flex">
-                    <button class="btn btn-outline-dark mx-3" type="button" id="popoverButton" data-html="true">
-                        <i class="bi-cart-fill me-1"></i>
-                        MyCart
-                        <span id="cart" class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
-                </form>
-            </div>
+    <div id="main">
+        <div class="openbtn" onclick="openNav()">☰</div>
+
+        <!-- Search bar centered -->
+        <form method="get" action="/shop/search/" class="search-bar" id="searchForm">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search"
+                id="search" onkeypress="handleKeyPress(event)" />
+        </form>
+
+        <!-- Cart button always on the right -->
+        <div class="cart-button">
+            <form class="d-flex">
+                <button class="btn btn-outline-dark mx-3" type="button" id="popoverButton" data-html="true">
+                    <i class="bi-cart-fill me-1"></i>
+                    MyCart
+                    <span id="cart" class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                </button>
+            </form>
         </div>
-    </nav>
-    <header class="bg-dark py-5">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Shop in style</h1>
-                <p class="lead fw-normal text-white-50 mb-0">With My Awesome Cart</p>
-            </div>
+    </div>
+<div id="navbar">
+  <a href="#" class="closebtn" onclick="closeNav()">×</a>
+  <a class="nav-link active" aria-current="page" href="/shop">Home</a>
+  <a class="nav-link" href="/shop/about">About</a>
+<a class="nav-link" href="/shop/contact">Contact</a>
+<a class="nav-link" href="/shop/tracker">Tracker</a>
+<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Categories
+</a>
+<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <!-- Add your dropdown items here -->
+    <a class="dropdown-item" href="/shop/subcategory/Airbuds">Airpods</a>
+    <a class="dropdown-item" href="/shop/subcategory/Smart watch">Smart watch</a>
+    <a class="dropdown-item" href="/shop/subcategory/Wrist Watch">Wrist Watch</a>
+    <a class="dropdown-item" href="/shop/subcategory/mens_wear">Are You Man?</a>
+    <a class="dropdown-item" href="/shop/subcategory/Shoes">Try Shoes</a>
+    <a class="dropdown-item" href="/shop/subcategory/Nack-Band">Try Nack-Band </a>
+    <a class="dropdown-item" href="/shop/subcategory/Washing-Machines">Washing-Machines </a>
+    <a class="dropdown-item" href="/shop/subcategory/MobilePhones">Want A Mobile phone?</a>
+    <a class="dropdown-item" href="/shop/subcategory/Apple Phones">Apple Lover?</a>
+</div>
+</div>
+<header class="me bg-dark py-5 mt-50 me">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Shop in style</h1>
+            <p class="lead fw-normal text-white-50 mb-0">With My Awesome Cart</p>
         </div>
-    </header>
+    </div>
+</header>
 
     {% block body %} {% endblock %}
 
@@ -147,8 +221,29 @@
   });
   //popover logic
   //update cart functon using addto cart button
-  
-  
+
+
 </script>
+<script>
+     function openNav() {
+            document.getElementById("navbar").classList.add("overlay-open");
+            document.getElementById("navbar").style.left = "0";
+            document.getElementById("main").style.marginLeft = "250px";
+            document.querySelector(".openbtn").style.display = "none";
+        }
+
+        function closeNav() {
+            document.getElementById("navbar").classList.remove("overlay-open");
+            document.getElementById("navbar").style.left = "-250px";
+            document.getElementById("main").style.marginLeft = "0";
+            document.querySelector(".openbtn").style.display = "block";
+        }
+
+        function handleKeyPress(event) {
+            if (event.keyCode === 13) {
+                document.getElementById("searchForm").submit();
+            }
+        }
+  </script>
 </html>
 
